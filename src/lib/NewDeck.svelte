@@ -6,6 +6,13 @@
 
   const dispatch = createEventDispatcher();
 
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      createDeck();
+    }
+  });
+
   const createDeck = () => {
     dispatch("deckcreate", {
       deckName,
