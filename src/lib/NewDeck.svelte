@@ -1,13 +1,26 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+
   let deckName: string = "";
   let deckDescription: string = "";
 
+  const dispatch = createEventDispatcher();
+
   const createDeck = () => {
+    dispatch("deckcreate", {
+      deckName,
+      deckDescription,
+    });
+
     deckName = "";
     deckDescription = "";
   };
 
-  const cancelDeckCreation = () => {};
+  const cancelDeckCreation = () => {
+    dispatch("deckcancel");
+    deckName = "";
+    deckDescription = "";
+  };
 </script>
 
 <h3>New Deck</h3>
