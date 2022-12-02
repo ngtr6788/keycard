@@ -30,8 +30,25 @@
   };
 </script>
 
-<h3>New Deck</h3>
-<input type="text" bind:value={deckName} />
-<textarea bind:value={deckDescription} />
-<button on:click={createDeck}>Create</button>
-<button on:click={cancelDeckCreation}>Cancel</button>
+<div class="flex flex-col">
+  <h3 class="mx-auto text-lg">New Deck</h3>
+  <input
+    class="mx-auto w-60 my-2 px-2 py-1 border-2 rounded border-black"
+    type="text"
+    bind:value={deckName}
+  />
+  <textarea
+    class="mx-auto w-60 my-2 px-2 py-1 border-2 rounded border-black"
+    bind:value={deckDescription}
+  />
+  <div class="flex flex-row mx-auto">
+    <button
+      class="bg-sky-600 m-5 px-3 py-2 text-white rounded-md"
+      on:click={createDeck}>Create [press enter]</button
+    >
+    <button
+      class="bg-red-600 m-5 px-3 py-2 text-white rounded-md"
+      on:click={cancelDeckCreation}>Cancel</button
+    >
+  </div>
+</div>
