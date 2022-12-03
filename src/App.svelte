@@ -1,8 +1,8 @@
 <script lang="ts">
-  import NewDeck from "./lib/NewDeck.svelte";
+  import HomePage from "./lib/HomePage.svelte";
 </script>
 
-<NewDeck />
+<HomePage />
 
 <style>
 </style>
