@@ -3,17 +3,17 @@
 
   let deckName: string = "";
   let deckDescription: string = "";
+  let error = false;
 
   const dispatch = createEventDispatcher();
 
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      createDeck();
-    }
-  });
-
   const createDeck = () => {
+    if (deckName === "") {
+      error = true;
+      return;
+    }
+
+    error = false;
     dispatch("deckcreate", {
       deckName,
       deckDescription,
@@ -25,30 +25,40 @@
 
   const cancelDeckCreation = () => {
     dispatch("deckcancel");
+    error = false;
     deckName = "";
     deckDescription = "";
   };
 </script>
 
-<div class="flex flex-col">
-  <h3 class="mx-auto text-lg">New Deck</h3>
+<div class="flex flex-col items-center m-4">
+  <h3 class="text-lg">New Deck</h3>
   <input
-    class="mx-auto w-60 my-2 px-2 py-1 border-2 rounded border-black"
+    class="w-60 my-2 px-2 py-1 border-2 rounded border-black"
+    class:border-red-600={error}
+    on:input={() => {
+      error = false;
+    }}
     type="text"
+    placeholder="Deck Name"
     bind:value={deckName}
   />
   <textarea
-    class="mx-auto w-60 my-2 px-2 py-1 border-2 rounded border-black"
+    class="w-60 my-2 px-2 py-1 border-2 rounded border-black"
+    placeholder="Description"
     bind:value={deckDescription}
   />
-  <div class="flex flex-row mx-auto">
+  <div class="flex flex-row">
     <button
-      class="bg-sky-600 m-5 px-3 py-2 text-white rounded-md"
-      on:click={createDeck}>Create [press enter]</button
+      class="bg-sky-600 m-5 px-3 py-2 text-white rounded-md hover:bg-sky-700 hover:shadow-lg"
+      on:click={createDeck}>Create</button
     >
     <button
-      class="bg-red-600 m-5 px-3 py-2 text-white rounded-md"
+      class="bg-red-600 m-5 px-3 py-2 text-white rounded-md hover:bg-red-700 hover:shadow-lg"
       on:click={cancelDeckCreation}>Cancel</button
     >
   </div>
+  {#if error}
+    <p class=" text-red-600">Deck name is required</p>
+  {/if}
 </div>
