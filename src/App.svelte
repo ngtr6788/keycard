@@ -1,8 +1,8 @@
 <script lang="ts">
-  import HomePage from "./lib/HomePage.svelte";
+  import NewCard from "./lib/NewCard.svelte";
 </script>
 
-<HomePage />
+<NewCard />
 
 <style>
 </style>
