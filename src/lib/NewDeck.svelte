@@ -34,7 +34,7 @@
 <div class="flex flex-col items-center m-4">
   <h3 class="text-lg">New Deck</h3>
   <input
-    class="w-60 my-2 px-2 py-1 border-2 rounded border-black"
+    class="w-96 my-2 px-2 py-1 border-2 rounded border-black"
     class:border-red-600={error}
     on:input={() => {
       error = false;
@@ -44,7 +44,7 @@
     bind:value={deckName}
   />
   <textarea
-    class="w-60 my-2 px-2 py-1 border-2 rounded border-black"
+    class="w-96 my-2 px-2 py-1 border-2 rounded border-black"
     placeholder="Description"
     bind:value={deckDescription}
   />
