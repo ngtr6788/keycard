@@ -18,7 +18,7 @@
     }
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: KeyboardEvent) => {
     // also, we can only type on the console if it's clicked on
     if (keysScreenClicked && !disabled) {
       // we clear console with ESC button, unless it's empty,

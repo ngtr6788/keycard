@@ -9,7 +9,7 @@
 
   let cardQuestion = "What is the three finger salute?"; // This can change on the card
   let cardAnswer = ["Control", "Alt", "Delete"]; // This can change on the card
-  let currentKeysList = [];
+  let currentKeysList: string[] = [];
 
   let studyStatus = StudyStatus.NotSubmitted;
 
