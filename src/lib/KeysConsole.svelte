@@ -3,13 +3,15 @@
   import { createEventDispatcher } from "svelte";
 
   export let keysList: string[] = [];
+  export let disabled = false;
+
   let keysScreenElement: HTMLParagraphElement;
   let keysScreenClicked = false;
 
   // we can only type on the console if console is clicked on
   const clickedOn = (event: MouseEvent) => {
     let targetElement = event.target;
-    if (targetElement === keysScreenElement) {
+    if (targetElement === keysScreenElement && !disabled) {
       keysScreenClicked = true;
     } else {
       keysScreenClicked = false;
@@ -18,7 +20,7 @@
 
   const handleKeyDown = (event) => {
     // also, we can only type on the console if it's clicked on
-    if (keysScreenClicked) {
+    if (keysScreenClicked && !disabled) {
       // we clear console with ESC button, unless it's empty,
       // in which case, we display the word escape
       if (event.key === "Escape" && keysList.length !== 0) {

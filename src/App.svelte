@@ -1,8 +1,8 @@
 <script lang="ts">
-  import NewCard from "./lib/NewCard.svelte";
+  import StudyCard from "./lib/StudyCard.svelte";
 </script>
 
-<NewCard />
+<StudyCard />
 
 <style>
 </style>
