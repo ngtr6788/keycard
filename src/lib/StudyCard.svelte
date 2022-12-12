@@ -1,5 +1,6 @@
 <script lang="ts">
   import KeysConsole from "./KeysConsole.svelte";
+  import { link } from "svelte-routing";
 
   enum StudyStatus {
     Correct = "correct",
@@ -89,9 +90,11 @@
         on:click={nextCard}>Next</button
       >
     {/if}
-    <button
+    <a
       class="bg-yellow-300 my-2 mx-1 px-3 py-2 text-black rounded-md hover:bg-yello-400 hover:shadow-lg"
-      on:click={handleExit}>Exit</button
+      href="/"
+      use:link
+      on:click={handleExit}>Exit</a
     >
   </div>
 </div>

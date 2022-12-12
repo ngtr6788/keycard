@@ -1,5 +1,6 @@
 <script lang="ts">
   import KeysConsole from "./KeysConsole.svelte";
+  import { link } from "svelte-routing";
 
   let deckName = "VS Code Keyboard Shortcuts";
   let commandFunc = "";
@@ -35,9 +36,10 @@
       class="bg-emerald-300 m-5 px-3 py-2 text-black rounded-md hover:bg-emerald-400 hover:shadow-lg"
       on:click={handleAdd}>Add</button
     >
-    <button
+    <a
       class="bg-yellow-300 m-5 px-3 py-2 text-black rounded-md hover:bg-yellow-400 hover:shadow-lg"
-      >Done</button
+      href="/"
+      use:link>Done</a
     >
   </div>
   {#if error}

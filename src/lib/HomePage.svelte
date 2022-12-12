@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { link } from "svelte-routing";
+
   // Temporary deck list
   let deckNames = [
     {
@@ -27,9 +29,10 @@
 <div class="mx-10 my-4">
   <div class="flex flex-row justify-between items-center">
     <h1 class="text-2xl">Your Decks</h1>
-    <button
+    <a
       class="bg-purple-700 py-1 px-2 text-white rounded hover:shadow-lg hover:bg-purple-800"
-      >New Deck</button
+      href="/new-deck"
+      use:link>New Deck</a
     >
   </div>
   {#if deckNames.length !== 0}

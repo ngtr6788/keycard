@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
+  import { link, navigate } from "svelte-routing";
 
   let deckName: string = "";
   let deckDescription: string = "";
@@ -21,6 +22,7 @@
 
     deckName = "";
     deckDescription = "";
+    navigate("/");
   };
 
   const cancelDeckCreation = () => {
@@ -53,9 +55,11 @@
       class="bg-sky-600 m-5 px-3 py-2 text-white rounded-md hover:bg-sky-700 hover:shadow-lg"
       on:click={createDeck}>Create</button
     >
-    <button
+    <a
       class="bg-red-600 m-5 px-3 py-2 text-white rounded-md hover:bg-red-700 hover:shadow-lg"
-      on:click={cancelDeckCreation}>Cancel</button
+      href="/"
+      on:click={cancelDeckCreation}
+      use:link>Cancel</a
     >
   </div>
   {#if error}
