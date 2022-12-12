@@ -1,6 +1,7 @@
 <script lang="ts">
   import KeysConsole from "./KeysConsole.svelte";
   import { link } from "svelte-routing";
+  import { invoke } from "@tauri-apps/api/tauri";
 
   let deckName = "VS Code Keyboard Shortcuts";
   let commandFunc = "";
@@ -11,6 +12,11 @@
     if (commandFunc === "" || keyboardShortcut.length === 0) {
       error = true;
     } else {
+      invoke("add_card", {
+        deckName,
+        cardDescription: commandFunc,
+        keysList: keyboardShortcut,
+      });
       commandFunc = "";
       keyboardShortcut = [];
     }

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { link, navigate } from "svelte-routing";
+  import { invoke } from "@tauri-apps/api/tauri";
 
   let deckName: string = "";
   let deckDescription: string = "";
@@ -15,6 +16,7 @@
     }
 
     error = false;
+    invoke("add_deck", { deckName, deckDescription });
     dispatch("deckcreate", {
       deckName,
       deckDescription,
