@@ -44,7 +44,7 @@
     >
     <a
       class="bg-yellow-300 m-5 px-3 py-2 text-black rounded-md hover:bg-yellow-400 hover:shadow-lg"
-      href="/"
+      href="/card-list"
       use:link>Done</a
     >
   </div>

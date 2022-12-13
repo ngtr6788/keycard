@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { link } from "svelte-routing";
+  import { link, navigate } from "svelte-routing";
 
   // Temporary deck list
   let deckNames = [
@@ -40,6 +40,8 @@
       {#each deckNames as { name, description, numberOfCards }}
         <div
           class="border-2 border-black my-2 p-2 rounded-md hover:bg-slate-100 hover:shadow-lg hover:cursor-pointer odd:mr-2 even:ml-2"
+          on:keyup={() => navigate("/card-list")}
+          on:click={() => navigate("/card-list")}
         >
           <h5 class="text-m">{name}</h5>
           <p

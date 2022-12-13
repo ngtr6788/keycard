@@ -4,6 +4,7 @@
   import HomePage from "./lib/HomePage.svelte";
   import NewCard from "./lib/NewCard.svelte";
   import StudyCard from "./lib/StudyCard.svelte";
+  import CardList from "./lib/CardList.svelte";
 </script>
 
 <Router>
@@ -11,6 +12,7 @@
   <Route path="/new-deck" component={NewDeck} />
   <Route path="/new-card" component={NewCard} />
   <Route path="/study-card" component={StudyCard} />
+  <Route path="/card-list" component={CardList} />
 </Router>
 
 <style>

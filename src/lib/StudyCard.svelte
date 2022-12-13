@@ -92,7 +92,7 @@
     {/if}
     <a
       class="bg-yellow-300 my-2 mx-1 px-3 py-2 text-black rounded-md hover:bg-yello-400 hover:shadow-lg"
-      href="/"
+      href="/card-list"
       use:link
       on:click={handleExit}>Exit</a
     >
