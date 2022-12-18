@@ -89,7 +89,7 @@ fn get_cards_from_deck(deck_id: i32) -> Vec<Card> {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![add_deck, get_decks, add_card])
+        .invoke_handler(tauri::generate_handler![add_deck, get_decks, add_card, get_cards_from_deck])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
