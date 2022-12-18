@@ -10,7 +10,7 @@ use diesel::sqlite::SqliteConnection;
 use diesel::prelude::*;
 use dotenvy::dotenv;
 use std::env;
-use crate::models::{Deck, NewDeck};
+use crate::models::{Deck, NewDeck, Card, KeyStringCard, NewCard};
 use crate::schema::decks::dsl::decks;
 
 pub fn establish_connection() -> SqliteConnection {
@@ -46,13 +46,45 @@ fn get_decks() -> Vec<Deck> {
 }
 
 #[tauri::command]
-fn add_card(deck_name: String, card_description: String, keys_list: Vec<String>) {
-    println!("Deck name: {deck_name}");
-    println!("Card description: {card_description}");
-    println!("Keys list: ");
-    for key in keys_list {
-        println!("{key} ");
-    }
+fn add_card(deck_id: i32, card_question: String, keys_list: Vec<String>) {
+    use crate::schema::cards::dsl::cards;
+
+    let keys_list_string: String = keys_list.join(",");
+
+    let new_card = NewCard {
+        deck_id,
+        card_question: &card_question,
+        keys_list: &keys_list_string,
+    };
+
+    let connection = &mut establish_connection();
+    diesel::insert_into(cards)
+        .values(&new_card)
+        .execute(connection);
+}
+
+#[tauri::command]
+fn get_cards_from_deck(deck_id: i32) -> Vec<Card> {
+    use crate::schema::cards;
+
+    let connection = &mut establish_connection();
+    let cards_list = cards::table
+        .filter(cards::deck_id.eq(deck_id))
+        .load::<KeyStringCard>(connection)
+        .expect("Error loading cards");
+    
+    let cards_vec: Vec<Card> = cards_list.into_iter().map(|card| {
+        let keys_list_vec: Vec<String> = card.keys_list.split(",").map(|s| s.to_string()).collect();
+
+        Card {
+            deck_id: card.deck_id,
+            id: card.id, 
+            card_question: card.card_question,
+            keys_list: keys_list_vec,
+        }
+    }).collect();
+
+    cards_vec
 }
 
 fn main() {
