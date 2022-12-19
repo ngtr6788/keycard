@@ -1,12 +1,7 @@
 <script lang="ts">
   import { link, navigate } from "svelte-routing";
   import { invoke } from "@tauri-apps/api/tauri";
-
-  type Deck = {
-    id: number;
-    deck_name: string;
-    deck_description: string;
-  };
+  import type { Deck } from "src/types";
 
   // Temporary deck list
   let deckNamesPromise: Promise<Deck[]> = invoke("get_decks");

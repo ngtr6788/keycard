@@ -1,19 +1,18 @@
 <script lang="ts">
   import { invoke } from "@tauri-apps/api/tauri";
+  import type { Deck, Card } from "src/types";
   import { onMount } from "svelte";
   import { link } from "svelte-routing";
 
   export let id: string;
-  const deckName = "Vim commands";
-
-  type Card = {
-    card_question: string;
-    keys_list: string[];
-  };
+  let deckName = "";
+  let deckInfo: Deck | null;
+  $: deckName = deckInfo?.deck_name ?? "";
 
   let cards: Card[] = [];
   onMount(async () => {
     cards = await invoke("get_cards_from_deck", { deckId: parseInt(id) });
+    deckInfo = await invoke("get_deck", { deckId: parseInt(id) });
   });
 </script>
 
