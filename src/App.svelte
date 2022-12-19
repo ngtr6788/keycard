@@ -10,9 +10,9 @@
 <Router>
   <Route path="/" component={HomePage} />
   <Route path="/new-deck" component={NewDeck} />
-  <Route path="/new-card" component={NewCard} />
-  <Route path="/study-card" component={StudyCard} />
-  <Route path="/card-list" component={CardList} />
+  <Route path="/new-card/:id" component={NewCard} />
+  <Route path="/study-card/:id" component={StudyCard} />
+  <Route path="/card-list/:id" component={CardList} />
 </Router>
 
 <style>

@@ -1,26 +1,20 @@
 <script lang="ts">
+  import { invoke } from "@tauri-apps/api/tauri";
+  import { onMount } from "svelte";
   import { link } from "svelte-routing";
 
+  export let id: string;
   const deckName = "Vim commands";
 
-  const cards = [
-    {
-      cardDescription: "Copy 5 lines",
-      keysList: ["5", "y"],
-    },
-    {
-      cardDescription: "Save and exit the file",
-      keysList: [":", "w", "q"],
-    },
-    {
-      cardDescription: "Go up one line",
-      keysList: ["k"],
-    },
-    {
-      cardDescription: "Delete 10 lines",
-      keysList: ["1", "0", "d"],
-    },
-  ];
+  type Card = {
+    card_question: string;
+    keys_list: string[];
+  };
+
+  let cards: Card[] = [];
+  onMount(async () => {
+    cards = await invoke("get_cards_from_deck", { deckId: parseInt(id) });
+  });
 </script>
 
 <div class="mx-10 my-4">
@@ -29,12 +23,12 @@
     <div>
       <a
         class="bg-amber-400 py-1 px-2 text-black rounded hover:shadow-lg hover:bg-amber-500"
-        href="/new-card"
+        href={`/new-card/${id}`}
         use:link>New Card</a
       >
       <a
         class="bg-sky-400 py-1 px-2 text-white rounded hover:shadow-lg hover:bg-sky-500"
-        href="/study-card"
+        href={`/study-card/${id}`}
         use:link>Study Deck</a
       >
       <a
@@ -46,13 +40,13 @@
   </div>
   {#if cards.length !== 0}
     <div class="grid grid-cols-3">
-      {#each cards as { cardDescription, keysList }}
+      {#each cards as { card_question, keys_list }}
         <div
           class="border-2 border-black rounded-md py-1 px-2 hover:shadow-md hover:bg-gray-100 m-1"
         >
-          <p>{cardDescription}</p>
+          <p>{card_question}</p>
           <p>
-            {keysList.reduce((prevValue, curValue) => {
+            {keys_list.reduce((prevValue, curValue) => {
               return prevValue + curValue + " ";
             }, "")}
           </p>

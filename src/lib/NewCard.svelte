@@ -3,6 +3,7 @@
   import { link } from "svelte-routing";
   import { invoke } from "@tauri-apps/api/tauri";
 
+  export let id: string;
   let deckName = "VS Code Keyboard Shortcuts";
   let commandFunc = "";
   let keyboardShortcut: string[] = [];
@@ -13,8 +14,8 @@
       error = true;
     } else {
       invoke("add_card", {
-        deckName,
-        cardDescription: commandFunc,
+        deckId: parseInt(id),
+        cardQuestion: commandFunc,
         keysList: keyboardShortcut,
       });
       commandFunc = "";
@@ -44,7 +45,7 @@
     >
     <a
       class="bg-yellow-300 m-5 px-3 py-2 text-black rounded-md hover:bg-yellow-400 hover:shadow-lg"
-      href="/card-list"
+      href={`/card-list/${id}`}
       use:link>Done</a
     >
   </div>

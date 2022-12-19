@@ -2,6 +2,8 @@
   import KeysConsole from "./KeysConsole.svelte";
   import { link } from "svelte-routing";
 
+  export let id: string;
+
   enum StudyStatus {
     Correct = "correct",
     Incorrect = "incorrect",
@@ -92,7 +94,7 @@
     {/if}
     <a
       class="bg-yellow-300 my-2 mx-1 px-3 py-2 text-black rounded-md hover:bg-yello-400 hover:shadow-lg"
-      href="/card-list"
+      href={`/card-list/${id}`}
       use:link
       on:click={handleExit}>Exit</a
     >

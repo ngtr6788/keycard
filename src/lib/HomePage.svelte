@@ -26,11 +26,11 @@
   {:then deckNames}
     {#if deckNames.length !== 0}
       <div class="grid grid-cols-2 my-1">
-        {#each deckNames as { deck_name, deck_description }}
+        {#each deckNames as { id, deck_name, deck_description }}
           <div
             class="border-2 border-black my-2 p-2 rounded-md hover:bg-slate-100 hover:shadow-lg hover:cursor-pointer odd:mr-2 even:ml-2"
-            on:keyup={() => navigate("/card-list")}
-            on:click={() => navigate("/card-list")}
+            on:keyup={() => navigate(`/card-list/${id}`)}
+            on:click={() => navigate(`/card-list/${id}`)}
           >
             <h5 class="text-m">{deck_name}</h5>
             <p
