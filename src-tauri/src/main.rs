@@ -46,6 +46,24 @@ fn get_decks() -> Vec<Deck> {
 }
 
 #[tauri::command]
+fn get_deck(deck_id: i32) -> Option<Deck> {
+    use crate::schema::decks::id;
+
+    let connection = &mut establish_connection();
+    let mut results = decks
+        .filter(id.eq(deck_id))
+        .load::<Deck>(connection)
+        .expect("Error loading decks");
+    
+    if results.len() > 0 {
+        let card = results.swap_remove(0);
+        Some(card)
+    } else {
+        None
+    }
+}
+
+#[tauri::command]
 fn add_card(deck_id: i32, card_question: String, keys_list: Vec<String>) {
     use crate::schema::cards::dsl::cards;
 
@@ -89,7 +107,7 @@ fn get_cards_from_deck(deck_id: i32) -> Vec<Card> {
 
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(tauri::generate_handler![add_deck, get_decks, add_card, get_cards_from_deck])
+        .invoke_handler(tauri::generate_handler![add_deck, get_decks, get_deck, add_card, get_cards_from_deck])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
