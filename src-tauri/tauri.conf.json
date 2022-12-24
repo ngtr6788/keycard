@@ -56,8 +56,8 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 550,
-        "width": 750,
+        "height": 400,
+        "width": 600,
         "resizable": false,
         "title": "keycards"
       }
