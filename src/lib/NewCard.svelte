@@ -2,9 +2,13 @@
   import KeysConsole from "./KeysConsole.svelte";
   import { link } from "svelte-routing";
   import { invoke } from "@tauri-apps/api/tauri";
+  import { onMount } from "svelte";
+  import type { Deck } from "src/types";
 
   export let id: string;
-  let deckName = "VS Code Keyboard Shortcuts";
+  let deckInfo: Deck;
+  $: deckName = deckInfo?.deck_name ?? "";
+
   let commandFunc = "";
   let keyboardShortcut: string[] = [];
   let error = false;
@@ -22,6 +26,10 @@
       keyboardShortcut = [];
     }
   };
+
+  onMount(async () => {
+    deckInfo = await invoke("get_deck", { deckId: parseInt(id) });
+  });
 </script>
 
 <div class="flex flex-col items-center m-4">
