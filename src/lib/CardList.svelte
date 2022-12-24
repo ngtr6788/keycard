@@ -5,14 +5,15 @@
   import { link } from "svelte-routing";
 
   export let id: string;
-  let deckName = "";
-  let deckInfo: Deck | null;
+  let deckInfo: Deck;
   $: deckName = deckInfo?.deck_name ?? "";
 
   let cards: Card[] = [];
   onMount(async () => {
-    cards = await invoke("get_cards_from_deck", { deckId: parseInt(id) });
-    deckInfo = await invoke("get_deck", { deckId: parseInt(id) });
+    [cards, deckInfo] = await Promise.all<[Promise<Card[]>, Promise<Deck>]>([
+      invoke("get_cards_from_deck", { deckId: parseInt(id) }),
+      invoke("get_deck", { deckId: parseInt(id) }),
+    ]);
   });
 </script>
 
