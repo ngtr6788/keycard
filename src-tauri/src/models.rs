@@ -1,3 +1,4 @@
+use chrono::{DateTime, FixedOffset};
 use diesel::prelude::*;
 use serde::Serialize;
 use crate::schema::{decks, cards};
@@ -22,6 +23,9 @@ pub struct KeyStringCard {
   pub id: i32,
   pub card_question: String,
   pub keys_list: String,
+  pub successful_reviews: i32,
+  pub due_datetime: String,
+  pub efactor: f32,
 }
 
 #[derive(Serialize)]
@@ -30,6 +34,26 @@ pub struct Card {
   pub id: i32,
   pub card_question: String,
   pub keys_list: Vec<String>,
+  pub successful_reviews: i32,
+  pub due_datetime: DateTime<FixedOffset>,
+  pub efactor: f32,
+}
+
+impl From<KeyStringCard> for Card {
+    fn from(card: KeyStringCard) -> Self {
+        let keys_list_vec: Vec<String> = card.keys_list.split(",").map(|s| s.to_string()).collect();
+        let due_datetime = DateTime::parse_from_rfc3339(&card.due_datetime).unwrap();
+
+        Card {
+            deck_id: card.deck_id,
+            id: card.id, 
+            card_question: card.card_question,
+            keys_list: keys_list_vec,
+            successful_reviews: card.successful_reviews,
+            due_datetime,
+            efactor: card.efactor,
+        }
+    }
 }
 
 #[derive(Insertable)]
@@ -38,4 +62,7 @@ pub struct NewCard<'a> {
   pub deck_id: i32,
   pub card_question: &'a str,
   pub keys_list: &'a str,
+  pub successful_reviews: i32,
+  pub due_datetime: &'a str,
+  pub efactor: f32,
 }

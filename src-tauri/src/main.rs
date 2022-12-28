@@ -7,11 +7,11 @@ pub mod models;
 pub mod schema;
 
 use diesel::sqlite::SqliteConnection;
+use chrono::{Local, DateTime};
 use diesel::prelude::*;
 use dotenvy::dotenv;
 use std::env;
 use crate::models::{Deck, NewDeck, Card, KeyStringCard, NewCard};
-use crate::schema::decks::dsl::decks;
 
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
@@ -23,6 +23,7 @@ pub fn establish_connection() -> SqliteConnection {
 
 #[tauri::command]
 fn add_deck(deck_name: String, deck_description: String) {
+    use crate::schema::decks::dsl::decks;
     let new_deck = NewDeck { 
         deck_name: &deck_name, 
         deck_description: &deck_description 
@@ -37,6 +38,7 @@ fn add_deck(deck_name: String, deck_description: String) {
 
 #[tauri::command]
 fn get_decks() -> Vec<Deck> {
+    use crate::schema::decks::dsl::decks;
     let connection = &mut establish_connection();
     let results = decks
         .load::<Deck>(connection)
@@ -48,6 +50,7 @@ fn get_decks() -> Vec<Deck> {
 #[tauri::command]
 fn get_deck(deck_id: i32) -> Option<Deck> {
     use crate::schema::decks::id;
+    use crate::schema::decks::dsl::decks;
 
     let connection = &mut establish_connection();
     let mut results = decks
@@ -69,10 +72,16 @@ fn add_card(deck_id: i32, card_question: String, keys_list: Vec<String>) {
 
     let keys_list_string: String = keys_list.join(",");
 
+    let now = Local::now();
+    let now_string = now.to_rfc3339();
+        
     let new_card = NewCard {
         deck_id,
         card_question: &card_question,
         keys_list: &keys_list_string,
+        successful_reviews: 0,
+        efactor: 2.5,
+        due_datetime: &now_string,
     };
 
     let connection = &mut establish_connection();
@@ -91,18 +100,35 @@ fn get_cards_from_deck(deck_id: i32) -> Vec<Card> {
         .load::<KeyStringCard>(connection)
         .expect("Error loading cards");
     
-    let cards_vec: Vec<Card> = cards_list.into_iter().map(|card| {
-        let keys_list_vec: Vec<String> = card.keys_list.split(",").map(|s| s.to_string()).collect();
-
-        Card {
-            deck_id: card.deck_id,
-            id: card.id, 
-            card_question: card.card_question,
-            keys_list: keys_list_vec,
-        }
-    }).collect();
+    let mut cards_vec: Vec<Card> = cards_list.into_iter().map(|card| card.into()).collect(); 
 
     cards_vec
+}
+
+fn get_card(card_id: i32) -> Option<Card> {
+    use crate::schema::cards;
+    let connection = &mut establish_connection();
+    let cards_list = cards::table
+        .filter(cards::id.eq(card_id))
+        .load::<KeyStringCard>(connection)
+        .expect("Error loading cards");
+
+    let mut cards_vec: Vec<Card> = cards_list.into_iter().map(|card| card.into()).collect(); 
+
+    if cards_vec.len() > 0 {
+        let card = cards_vec.swap_remove(0);
+        Some(card)
+    } else {
+        None
+    }
+}
+
+fn evaluate_answer(card_id: i32, answer_keys_list: Vec<String>) {
+    let card_opt = get_card(card_id);
+
+    if let Some(card) = card_opt {
+
+    }
 }
 
 fn main() {

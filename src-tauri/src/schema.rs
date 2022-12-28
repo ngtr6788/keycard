@@ -6,6 +6,9 @@ diesel::table! {
         id -> Integer,
         card_question -> Text,
         keys_list -> Text,
+        successful_reviews -> Integer,
+        due_datetime -> Text,
+        efactor -> Float,
     }
 }
 
