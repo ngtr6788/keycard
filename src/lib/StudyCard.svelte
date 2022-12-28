@@ -1,6 +1,9 @@
 <script lang="ts">
   import KeysConsole from "./KeysConsole.svelte";
   import { link } from "svelte-routing";
+  import { invoke } from "@tauri-apps/api/tauri";
+  import { onMount } from "svelte";
+  import type { Card } from "../types";
 
   export let id: string;
 
@@ -10,8 +13,9 @@
     NotSubmitted = "not submitted",
   }
 
-  let cardQuestion = "What is the three finger salute?"; // This can change on the card
-  let cardAnswer = ["Control", "Alt", "Delete"]; // This can change on the card
+  let cardId: number;
+  let cardQuestion: string; // This can change on the card
+  let cardAnswer: string[]; // This can change on the card
   let currentKeysList: string[] = [];
 
   let studyStatus = StudyStatus.NotSubmitted;
@@ -30,26 +34,39 @@
     return true;
   };
 
-  const submitAndCheck = () => {
+  const submitAndCheck = async () => {
     if (compareArray(currentKeysList, cardAnswer)) {
       studyStatus = StudyStatus.Correct;
     } else {
       studyStatus = StudyStatus.Incorrect;
     }
+
+    await invoke("evaluate_and_update_card", { cardId, answerKeysList: currentKeysList });
   };
 
-  const nextCard = () => {
+  const getCard = async () => {
     studyStatus = StudyStatus.NotSubmitted;
     currentKeysList = [];
-
-    // This is temporary: This just gets new cards, I guess
-    cardQuestion = "What is the opposite of opinion?";
-    cardAnswer = ["f", "a", "c", "t"];
+    
+    const card: Card | null = await invoke("get_first_card_by_date", { deckId: parseInt(id) });
+    if (card) {
+      cardId = card.id;
+      cardQuestion = card.card_question;
+      cardAnswer = card.keys_list;
+    } else {
+      cardId = -1;
+      cardQuestion = "There are no cards here. Please create a new card";
+      cardAnswer = [];
+    }
   };
 
   const handleExit = () => {
     studyStatus = StudyStatus.NotSubmitted;
   };
+
+  onMount(() => {
+    getCard();
+  })
 </script>
 
 <div class="flex flex-col items-center m-4">
@@ -89,7 +106,7 @@
     {:else}
       <button
         class="bg-sky-600 my-2 mx-1 px-3 py-2 text-white rounded-md hover:bg-sky-700 hover:shadow-lg"
-        on:click={nextCard}>Next</button
+        on:click={getCard}>Next</button
       >
     {/if}
     <a
