@@ -4,9 +4,12 @@
   import { onMount } from "svelte";
   import { link } from "svelte-routing";
 
+  const MAX_DECK_NAME_LENGTH = 50;
+
   export let id: string;
   let deckInfo: Deck;
   $: deckName = deckInfo?.deck_name ?? "";
+  $: displayDeckName = deckName.length >= MAX_DECK_NAME_LENGTH ? `${deckName.substring(0, MAX_DECK_NAME_LENGTH)}...` : deckName;
 
   let cards: Card[] = [];
   onMount(async () => {
@@ -19,7 +22,7 @@
 
 <div class="mx-10 my-4">
   <div class="sticky top-4 h-[4.5rem]">
-    <h3 class="text-lg text-center">Deck: {deckName}</h3>
+    <h3 class="text-lg text-center">Deck: {displayDeckName}</h3>
     <div class="flex flex-row justify-center my-2">
       <div>
         <a
