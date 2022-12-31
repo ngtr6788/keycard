@@ -8,7 +8,7 @@
 </script>
 
 <div class="mx-10 my-4">
-  <div class="flex flex-row justify-between items-center">
+  <div class="flex flex-row justify-between items-center h-8">
     <h1 class="text-2xl">Your Decks</h1>
     <a
       class="bg-purple-700 py-1 px-2 text-white rounded hover:shadow-lg hover:bg-purple-800"
@@ -20,18 +20,17 @@
     <h4 class="text-base text-gray-500 my-1">Loading decks...</h4>
   {:then deckNames}
     {#if deckNames.length !== 0}
-      <div class="grid grid-cols-2 my-1">
+      <div class="grid grid-cols-2 my-1 overflow-y-scroll h-[18.5rem]">
         {#each deckNames as { id, deck_name, deck_description }}
           <div
             class="border-2 border-black my-2 p-2 rounded-md hover:bg-slate-100 hover:shadow-lg hover:cursor-pointer odd:mr-2 even:ml-2"
             on:keyup={() => navigate(`/card-list/${id}`)}
             on:click={() => navigate(`/card-list/${id}`)}
           >
-            <h5 class="text-m">{deck_name}</h5>
+            <h5 class="text-m overflow-x-hidden">{deck_name}</h5>
             <p
-              class={deck_description
-                ? "text-black text-sm"
-                : "text-gray-500 text-sm"}
+              class="text-sm overflow-x-hidden"
+              class:text-gray-500={!deck_description}
             >
               {deck_description || "No description"}
             </p>
