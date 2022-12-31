@@ -18,31 +18,33 @@
 </script>
 
 <div class="mx-10 my-4">
-  <div class="flex flex-row justify-between items-center my-2">
-    <h3 class="text-lg">Deck: {deckName}</h3>
-    <div>
-      <a
-        class="bg-amber-400 py-1 px-2 text-black rounded hover:shadow-lg hover:bg-amber-500"
-        href={`/new-card/${id}`}
-        use:link>New Card</a
-      >
-      <a
-        class="bg-sky-400 py-1 px-2 text-white rounded hover:shadow-lg hover:bg-sky-500"
-        href={`/study-card/${id}`}
-        use:link>Study Deck</a
-      >
-      <a
-        class="bg-rose-600 py-1 px-2 text-white rounded hover:shadow-lg hover:bg-rose-700"
-        href="/"
-        use:link>Leave Deck</a
-      >
+  <div class="sticky top-4 h-[4.5rem]">
+    <h3 class="text-lg text-center">Deck: {deckName}</h3>
+    <div class="flex flex-row justify-center my-2">
+      <div>
+        <a
+          class="bg-amber-400 py-1 px-2 text-black rounded hover:shadow-lg hover:bg-amber-500"
+          href={`/new-card/${id}`}
+          use:link>New Card</a
+        >
+        <a
+          class="bg-sky-400 py-1 px-2 text-white rounded hover:shadow-lg hover:bg-sky-500"
+          href={`/study-card/${id}`}
+          use:link>Study Deck</a
+        >
+        <a
+          class="bg-rose-600 py-1 px-2 text-white rounded hover:shadow-lg hover:bg-rose-700"
+          href="/"
+          use:link>Leave Deck</a
+        >
+      </div>
     </div>
   </div>
   {#if cards.length !== 0}
-    <div class="grid grid-cols-3">
+    <div class="overflow-y-scroll h-64">
       {#each cards as { card_question, keys_list }}
         <div
-          class="border-2 border-black rounded-md py-1 px-2 hover:shadow-md hover:bg-gray-100 m-1"
+          class="border-2 border-black rounded-md py-1 px-2 hover:shadow-md hover:bg-gray-100 my-1"
         >
           <p>{card_question}</p>
           <p>
