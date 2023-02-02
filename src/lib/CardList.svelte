@@ -1,4 +1,6 @@
 <script lang="ts">
+  import CardInfoButton from './CardInfoButton.svelte';
+
   import { invoke } from "@tauri-apps/api/tauri";
   import type { Deck, Card } from "src/types";
   import { onMount } from "svelte";
@@ -45,17 +47,8 @@
   </div>
   {#if cards.length !== 0}
     <div class="overflow-y-scroll h-64 scrollbar-hidden">
-      {#each cards as { card_question, keys_list }}
-        <div
-          class="border-2 border-black rounded-md py-1 px-2 hover:shadow-md hover:bg-gray-100 my-1"
-        >
-          <p>{card_question}</p>
-          <p>
-            {keys_list.reduce((prevValue, curValue) => {
-              return prevValue + curValue + " ";
-            }, "")}
-          </p>
-        </div>
+      {#each cards as card}
+        <CardInfoButton card={card} />
       {/each}
     </div>
   {:else}

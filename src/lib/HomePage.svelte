@@ -1,5 +1,7 @@
 <script lang="ts">
-  import { link, navigate } from "svelte-routing";
+  import DeckCardButton from './DeckCardButton.svelte';
+
+  import { link } from "svelte-routing";
   import { invoke } from "@tauri-apps/api/tauri";
   import type { Deck } from "src/types";
 
@@ -21,20 +23,8 @@
   {:then deckNames}
     {#if deckNames.length !== 0}
       <div class="grid grid-cols-2 my-1 overflow-y-scroll h-[18.5rem] scrollbar-hidden">
-        {#each deckNames as { id, deck_name, deck_description }}
-          <div
-            class="border-2 border-black my-2 p-2 rounded-md hover:bg-slate-100 hover:shadow-lg hover:cursor-pointer odd:mr-2 even:ml-2"
-            on:keyup={() => navigate(`/card-list/${id}`)}
-            on:click={() => navigate(`/card-list/${id}`)}
-          >
-            <h5 class="text-m overflow-x-hidden">{deck_name}</h5>
-            <p
-              class="text-sm overflow-x-hidden"
-              class:text-gray-500={!deck_description}
-            >
-              {deck_description || "No description"}
-            </p>
-          </div>
+        {#each deckNames as deck}
+          <DeckCardButton deck={deck} />
         {/each}
       </div>
     {:else}
