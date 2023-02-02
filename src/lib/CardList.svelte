@@ -44,7 +44,7 @@
     </div>
   </div>
   {#if cards.length !== 0}
-    <div class="overflow-y-scroll h-64">
+    <div class="overflow-y-scroll h-64 scrollbar-hidden">
       {#each cards as { card_question, keys_list }}
         <div
           class="border-2 border-black rounded-md py-1 px-2 hover:shadow-md hover:bg-gray-100 my-1"

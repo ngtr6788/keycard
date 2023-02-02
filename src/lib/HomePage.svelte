@@ -20,7 +20,7 @@
     <h4 class="text-base text-gray-500 my-1">Loading decks...</h4>
   {:then deckNames}
     {#if deckNames.length !== 0}
-      <div class="grid grid-cols-2 my-1 overflow-y-scroll h-[18.5rem]">
+      <div class="grid grid-cols-2 my-1 overflow-y-scroll h-[18.5rem] scrollbar-hidden">
         {#each deckNames as { id, deck_name, deck_description }}
           <div
             class="border-2 border-black my-2 p-2 rounded-md hover:bg-slate-100 hover:shadow-lg hover:cursor-pointer odd:mr-2 even:ml-2"
