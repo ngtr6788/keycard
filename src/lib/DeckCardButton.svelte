@@ -4,6 +4,7 @@
   import { invoke } from "@tauri-apps/api/tauri";
   import { onMount, createEventDispatcher } from "svelte";
   import { link } from "svelte-routing";
+  import DeleteWarning from "./DeleteWarning.svelte";
 
   // Temporary deck list
   export let deck: Deck;
@@ -12,6 +13,7 @@
 
   let cardBox: HTMLElement;
   let hover = false;
+  let modalDisplay = false;
 
   const hoverOn = () => {
     hover = true;
@@ -24,6 +26,15 @@
   const deleteDeck = async () => {
     await invoke("delete_deck", { deckId: deck.id });
     dispatch("deckdelete");
+    exitModal();
+  };
+
+  const enterModal = () => {
+    modalDisplay = true;
+  };
+
+  const exitModal = () => {
+    modalDisplay = false;
   };
 
   onMount(() => {
@@ -55,8 +66,13 @@
       >
       <button
         class="bg-red-500 text-white py-1 px-2 rounded-md"
-        on:click={deleteDeck}>Delete</button
+        on:click={enterModal}>Delete</button
       >
     </div>
   {/if}
+  <DeleteWarning
+    display={modalDisplay}
+    on:delete={deleteDeck}
+    on:exit={exitModal}
+  />
 </div>
