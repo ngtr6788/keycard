@@ -24,6 +24,10 @@
   const updateCards = async () => {
     cards = await invoke("get_cards_from_deck", { deckId: parseInt(id) });
   }
+
+  const deleteDeck = async () => {
+    await invoke("delete_deck", { deckId: parseInt(id) })
+  }
 </script>
 
 <div class="mx-10 my-4">
@@ -42,9 +46,15 @@
           use:link>Study Deck</a
         >
         <a
-          class="bg-rose-600 py-1 px-2 text-white rounded hover:shadow-lg hover:bg-rose-700"
+          class="bg-purple-600 py-1 px-2 text-white rounded hover:shadow-lg hover:bg-purple-700"
           href="/"
           use:link>Leave Deck</a
+        >
+        <a
+          class="bg-rose-600 py-1 px-2 text-white rounded hover:shadow-lg hover:bg-rose-700"
+          href="/"
+          on:click={deleteDeck}
+          use:link>Delete Deck</a
         >
       </div>
     </div>
@@ -52,7 +62,7 @@
   {#if cards.length !== 0}
     <div class="overflow-y-scroll h-64 scrollbar-hidden">
       {#each cards as card}
-        <CardInfoButton deckId={id} card={card} on:carddelete={updateCards}/>
+        <CardInfoButton deckId={id} {card} on:carddelete={updateCards} />
       {/each}
     </div>
   {:else}
