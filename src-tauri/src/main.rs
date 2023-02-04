@@ -212,6 +212,17 @@ fn delete_deck(deck_id: i32) {
     ).execute(connection);
 }
 
+#[tauri::command]
+fn delete_card(card_id: i32) {
+    use crate::schema::cards;
+
+    let connection = &mut establish_connection();
+
+    diesel::delete(
+        cards::table.filter(cards::id.eq(card_id))
+    ).execute(connection);
+}
+
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
@@ -223,6 +234,7 @@ fn main() {
             get_first_card_by_date,
             evaluate_and_update_card, 
             delete_deck,
+            delete_card,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -20,6 +20,10 @@
       invoke("get_deck", { deckId: parseInt(id) }),
     ]);
   });
+
+  const updateCards = async () => {
+    cards = await invoke("get_cards_from_deck", { deckId: parseInt(id) });
+  }
 </script>
 
 <div class="mx-10 my-4">
@@ -48,7 +52,7 @@
   {#if cards.length !== 0}
     <div class="overflow-y-scroll h-64 scrollbar-hidden">
       {#each cards as card}
-        <CardInfoButton card={card} />
+        <CardInfoButton card={card} on:carddelete={updateCards}/>
       {/each}
     </div>
   {:else}
