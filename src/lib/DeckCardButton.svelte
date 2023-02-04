@@ -22,7 +22,7 @@
 
   const deleteDeck = async () => {
     await invoke("delete_deck", { deckId: deck.id });
-    dispatch('deckdelete');
+    dispatch("deckdelete");
   };
 
   onMount(() => {
