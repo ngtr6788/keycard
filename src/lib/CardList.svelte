@@ -52,7 +52,7 @@
   {#if cards.length !== 0}
     <div class="overflow-y-scroll h-64 scrollbar-hidden">
       {#each cards as card}
-        <CardInfoButton card={card} on:carddelete={updateCards}/>
+        <CardInfoButton deckId={id} card={card} on:carddelete={updateCards}/>
       {/each}
     </div>
   {:else}

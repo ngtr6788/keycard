@@ -2,8 +2,10 @@
   import type { Card } from "src/types";
   import { invoke } from "@tauri-apps/api/tauri";
   import { onMount, createEventDispatcher } from "svelte";
+  import { link } from "svelte-routing";
 
   export let card: Card;
+  export let deckId: string;
 
   const dispatch = createEventDispatcher();
 
@@ -17,11 +19,11 @@
   const hoverOff = () => {
     hover = false;
   };
-  
+
   const deleteCard = async () => {
-    await invoke('delete_card', { cardId: card.id });
-    dispatch('carddelete');
-  }
+    await invoke("delete_card", { cardId: card.id });
+    dispatch("carddelete");
+  };
 
   onMount(() => {
     cardBox.addEventListener("mouseenter", hoverOn);
@@ -41,8 +43,14 @@
   </p>
   {#if hover}
     <div class="absolute top-1 right-1">
-      <button class="bg-green-500 py-1 px-2 rounded-md">Edit</button>
-      <button class="bg-red-500 py-1 px-2 rounded-md" on:click={deleteCard}>Delete</button>
+      <a
+        class="bg-green-500 py-1 px-2 rounded-md"
+        href={`/edit-card/${deckId}/${card.id}`}
+        use:link>Edit</a
+      >
+      <button class="bg-red-500 py-1 px-2 rounded-md" on:click={deleteCard}
+        >Delete</button
+      >
     </div>
   {/if}
 </div>

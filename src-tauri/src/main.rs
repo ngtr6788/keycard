@@ -108,6 +108,7 @@ fn get_cards_from_deck(deck_id: i32) -> Vec<Card> {
     cards_vec
 }
 
+#[tauri::command]
 fn get_card(card_id: i32) -> Option<Card> {
     use crate::schema::cards;
     let connection = &mut establish_connection();
@@ -227,6 +228,28 @@ fn delete_deck(deck_id: i32) {
 }
 
 #[tauri::command]
+fn edit_card(card_id: i32, card_question: String, keys_list: Vec<String>) {
+    use crate::schema::cards;
+
+    let connection = &mut establish_connection();
+
+    let keys_list_string: String = keys_list.join(",");
+    let now = Local::now();
+    let now_string = now.to_rfc3339();
+
+    diesel::update(cards::table.filter(cards::id.eq(card_id)))
+        .set((
+            cards::card_question.eq(card_question),
+            cards::keys_list.eq(keys_list_string),
+            cards::successful_reviews.eq(0),
+            cards::interval.eq(0),
+            cards::efactor.eq(2.5),
+            cards::due_datetime.eq(now_string),
+        ))
+        .execute(connection);
+}
+
+#[tauri::command]
 fn delete_card(card_id: i32) {
     use crate::schema::cards;
 
@@ -244,10 +267,12 @@ fn main() {
             get_decks,
             get_deck, 
             add_card, 
+            get_card,
             get_cards_from_deck,
             get_first_card_by_date,
             evaluate_and_update_card, 
             edit_deck,
+            edit_card,
             delete_deck,
             delete_card,
         ])
