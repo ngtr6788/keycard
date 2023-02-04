@@ -1,16 +1,16 @@
 <script lang="ts">
   import { Router, Route } from "svelte-routing";
-  import NewDeck from "./lib/NewDeck.svelte";
+  import DeckForm from "./lib/DeckForm.svelte";
   import HomePage from "./lib/HomePage.svelte";
-  import NewCard from "./lib/NewCard.svelte";
+  import CardForm from "./lib/CardForm.svelte";
   import StudyCard from "./lib/StudyCard.svelte";
   import CardList from "./lib/CardList.svelte";
 </script>
 
 <Router>
   <Route path="/" component={HomePage} />
-  <Route path="/new-deck" component={NewDeck} />
-  <Route path="/new-card/:id" component={NewCard} />
+  <Route path="/new-deck" component={DeckForm} />
+  <Route path="/new-card/:id" component={CardForm} />
   <Route path="/study-card/:id" component={StudyCard} />
   <Route path="/card-list/:id" component={CardList} />
 </Router>
