@@ -44,12 +44,13 @@
   {#if hover}
     <div class="absolute top-1 right-1">
       <a
-        class="bg-green-500 py-1 px-2 rounded-md"
+        class="bg-green-500 text-white py-1 px-2 rounded-md"
         href={`/edit-card/${deckId}/${card.id}`}
         use:link>Edit</a
       >
-      <button class="bg-red-500 py-1 px-2 rounded-md" on:click={deleteCard}
-        >Delete</button
+      <button
+        class="bg-red-500 text-white py-1 px-2 rounded-md"
+        on:click={deleteCard}>Delete</button
       >
     </div>
   {/if}
