@@ -1,5 +1,5 @@
 <script lang="ts">
-  import DeckCardButton from './DeckCardButton.svelte';
+  import DeckCardButton from "./DeckCardButton.svelte";
 
   import { link } from "svelte-routing";
   import { invoke } from "@tauri-apps/api/tauri";
@@ -10,7 +10,7 @@
 
   const updateDecks = () => {
     deckNamesPromise = invoke("get_decks");
-  }
+  };
 </script>
 
 <div class="mx-10 my-4">
@@ -26,10 +26,12 @@
     <h4 class="text-base text-gray-500 my-1">Loading decks...</h4>
   {:then deckNames}
     {#if deckNames.length !== 0}
-      <div class="grid grid-cols-2 auto-rows-min my-1 overflow-y-scroll h-[18.5rem] scrollbar-hidden">
+      <div
+        class="grid grid-cols-2 auto-rows-min my-1 overflow-y-scroll h-[18.5rem] scrollbar-hidden"
+      >
         {#each deckNames as deck}
           <div class="odd:mr-2 even:ml-2 my-1">
-            <DeckCardButton deck={deck} on:deckdelete={updateDecks} />
+            <DeckCardButton {deck} on:deckdelete={updateDecks} />
           </div>
         {/each}
       </div>
