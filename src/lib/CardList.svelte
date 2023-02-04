@@ -1,19 +1,24 @@
 <script lang="ts">
-  import CardInfoButton from './CardInfoButton.svelte';
-
+  import CardInfoButton from "./CardInfoButton.svelte";
+  import DeleteWarning from "./DeleteWarning.svelte";
   import { invoke } from "@tauri-apps/api/tauri";
   import type { Deck, Card } from "src/types";
   import { onMount } from "svelte";
-  import { link } from "svelte-routing";
+  import { link, navigate } from "svelte-routing";
 
   const MAX_DECK_NAME_LENGTH = 50;
 
   export let id: string;
   let deckInfo: Deck;
   $: deckName = deckInfo?.deck_name ?? "";
-  $: displayDeckName = deckName.length >= MAX_DECK_NAME_LENGTH ? `${deckName.substring(0, MAX_DECK_NAME_LENGTH)}...` : deckName;
+  $: displayDeckName =
+    deckName.length >= MAX_DECK_NAME_LENGTH
+      ? `${deckName.substring(0, MAX_DECK_NAME_LENGTH)}...`
+      : deckName;
 
   let cards: Card[] = [];
+  let modalDisplay = false;
+
   onMount(async () => {
     [cards, deckInfo] = await Promise.all<[Promise<Card[]>, Promise<Deck>]>([
       invoke("get_cards_from_deck", { deckId: parseInt(id) }),
@@ -23,11 +28,21 @@
 
   const updateCards = async () => {
     cards = await invoke("get_cards_from_deck", { deckId: parseInt(id) });
-  }
+  };
 
   const deleteDeck = async () => {
-    await invoke("delete_deck", { deckId: parseInt(id) })
-  }
+    await invoke("delete_deck", { deckId: parseInt(id) });
+    exitModal();
+    navigate("/");
+  };
+
+  const enterModal = () => {
+    modalDisplay = true;
+  };
+
+  const exitModal = () => {
+    modalDisplay = false;
+  };
 </script>
 
 <div class="mx-10 my-4">
@@ -50,11 +65,9 @@
           href="/"
           use:link>Leave Deck</a
         >
-        <a
+        <button
           class="bg-rose-600 py-1 px-2 text-white rounded hover:shadow-lg hover:bg-rose-700"
-          href="/"
-          on:click={deleteDeck}
-          use:link>Delete Deck</a
+          on:click={enterModal}>Delete Deck</button
         >
       </div>
     </div>
@@ -68,4 +81,9 @@
   {:else}
     <p class="text-base text-gray-500 my-1">No cards here.</p>
   {/if}
+  <DeleteWarning
+    display={modalDisplay}
+    on:delete={deleteDeck}
+    on:exit={exitModal}
+  />
 </div>

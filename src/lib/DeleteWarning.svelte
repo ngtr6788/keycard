@@ -8,15 +8,15 @@
   const handleDelete = () => {
     dispatch("delete");
     dispatch("exit");
-  }
+  };
 
   const handleExit = () => {
     dispatch("exit");
-  }
+  };
 </script>
 
 <div
-  class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full"
+  class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-[1000000]"
   class:hidden={!display}
 >
   <div
@@ -31,8 +31,7 @@
         >
         <button
           class="bg-white text-black py-1 px-2 rounded-md border-2 border-black"
-          on:click={handleExit}
-          >No</button
+          on:click={handleExit}>No</button
         >
       </div>
     </div>
