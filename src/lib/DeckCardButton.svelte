@@ -3,6 +3,7 @@
   import type { Deck } from "src/types";
   import { invoke } from "@tauri-apps/api/tauri";
   import { onMount, createEventDispatcher } from "svelte";
+  import { link } from "svelte-routing";
 
   // Temporary deck list
   export let deck: Deck;
@@ -47,7 +48,11 @@
   </div>
   {#if hover}
     <div class="absolute top-1 right-1">
-      <button class="bg-green-500 py-1 px-2 rounded-md">Edit</button>
+      <a
+        class="bg-green-500 py-1 px-2 rounded-md"
+        href={`/edit-deck/${deck.id}`}
+        use:link>Edit</a
+      >
       <button class="bg-red-500 py-1 px-2 rounded-md" on:click={deleteDeck}
         >Delete</button
       >

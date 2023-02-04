@@ -197,6 +197,20 @@ fn evaluate_and_update_card(card_id: i32, answer_keys_list: Vec<String>) {
 }
 
 #[tauri::command]
+fn edit_deck(deck_id: i32, deck_name: String, deck_description: String) {
+    use crate::schema::decks;
+
+    let connection = &mut establish_connection();
+
+    diesel::update(decks::table.filter(decks::id.eq(deck_id)))
+        .set((
+            decks::deck_name.eq(deck_name),
+            decks::deck_description.eq(deck_description)
+        ))
+        .execute(connection);
+}
+
+#[tauri::command]
 fn delete_deck(deck_id: i32) {
     use crate::schema::decks;
     use crate::schema::cards;
@@ -233,6 +247,7 @@ fn main() {
             get_cards_from_deck,
             get_first_card_by_date,
             evaluate_and_update_card, 
+            edit_deck,
             delete_deck,
             delete_card,
         ])
