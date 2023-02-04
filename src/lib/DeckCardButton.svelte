@@ -1,21 +1,56 @@
 <script lang="ts">
   import { navigate } from "svelte-routing";
   import type { Deck } from "src/types";
+  import { invoke } from "@tauri-apps/api/tauri";
+  import { onMount, createEventDispatcher } from "svelte";
 
   // Temporary deck list
   export let deck: Deck;
+
+  const dispatch = createEventDispatcher();
+
+  let cardBox: HTMLElement;
+  let hover = false;
+
+  const hoverOn = () => {
+    hover = true;
+  };
+
+  const hoverOff = () => {
+    hover = false;
+  };
+
+  const deleteDeck = async () => {
+    await invoke("delete_deck", { deckId: deck.id });
+    dispatch('deckdelete');
+  };
+
+  onMount(() => {
+    cardBox.addEventListener("mouseenter", hoverOn);
+    cardBox.addEventListener("mouseleave", hoverOff);
+  });
 </script>
 
-<div
-  class="border-2 border-black my-2 p-2 rounded-md hover:bg-slate-100 hover:shadow-lg hover:cursor-pointer odd:mr-2 even:ml-2"
-  on:keyup={() => navigate(`/card-list/${deck.id}`)}
-  on:click={() => navigate(`/card-list/${deck.id}`)}
->
-  <h5 class="text-m overflow-x-hidden">{deck.deck_name}</h5>
-  <p
-    class="text-sm overflow-x-hidden"
-    class:text-gray-500={!deck.deck_description}
+<div class="relative" bind:this={cardBox}>
+  <div
+    class="border-2 border-black p-2 rounded-md hover:cursor-pointer"
+    on:keyup={() => navigate(`/card-list/${deck.id}`)}
+    on:click={() => navigate(`/card-list/${deck.id}`)}
   >
-    {deck.deck_description || "No description"}
-  </p>
+    <h5 class="text-m overflow-x-hidden">{deck.deck_name}</h5>
+    <p
+      class="text-sm overflow-x-hidden"
+      class:text-gray-500={!deck.deck_description}
+    >
+      {deck.deck_description || "No description"}
+    </p>
+  </div>
+  {#if hover}
+    <div class="absolute top-1 right-1">
+      <button class="bg-green-500 py-1 px-2 rounded-md">Edit</button>
+      <button class="bg-red-500 py-1 px-2 rounded-md" on:click={deleteDeck}
+        >Delete</button
+      >
+    </div>
+  {/if}
 </div>

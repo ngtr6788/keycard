@@ -196,6 +196,22 @@ fn evaluate_and_update_card(card_id: i32, answer_keys_list: Vec<String>) {
     }
 }
 
+#[tauri::command]
+fn delete_deck(deck_id: i32) {
+    use crate::schema::decks;
+    use crate::schema::cards;
+
+    let connection = &mut establish_connection();
+
+    diesel::delete(
+        decks::table.filter(decks::id.eq(deck_id))
+    ).execute(connection);
+
+    diesel::delete(
+        cards::table.filter(cards::deck_id.eq(deck_id))
+    ).execute(connection);
+}
+
 fn main() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
@@ -206,6 +222,7 @@ fn main() {
             get_cards_from_deck,
             get_first_card_by_date,
             evaluate_and_update_card, 
+            delete_deck,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
